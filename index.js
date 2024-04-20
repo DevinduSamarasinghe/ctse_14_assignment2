@@ -6,8 +6,8 @@ app.get("/", res=>{
     res.send("First commit API test for CI/CD")
 })
 
-app.get("/dev",res=>{
-    res.send("Dev branch")
+app.get("/info",res=>{
+    res.send("IT21003332 - Devindu Samarasinghe\nIT21004636 - Nashali Perera\nIT21004322 - Chanukya Serasinghe")
 })
 
 app.listen(PORT, ()=>{
