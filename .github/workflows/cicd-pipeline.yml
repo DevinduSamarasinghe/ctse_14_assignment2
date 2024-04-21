@@ -55,6 +55,24 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
+      - name: Create New ECS Service (Blue)
+        run: |
+            aws ecs register-task-definition \
+              --family ctse-backend \
+              --cli-input-json file://ctse-backend.json \
+            && aws ecs create-service \
+              --cluster ctse-cluster \
+              --service-name ctse-backend-service-blue \
+              --task-definition ctse-backend \
+              --desired-count 1 \
+              --launch-type EC2  # Adjust if using EC2 instances
+              --network-configuration networkConfiguration="{subnets: ['subnet-0f479e14f57b357b3', 'subnet-0285c32c60a1ec6e9','subnet-0fc688f22ed6a0bc7']}"   # Replace with your subnet IDs
+              --load-balancers loadBalancers="[ {
+                'containerName': 'ctse-alb-1',
+                'containerPort': 80,
+                'targetGroupArn': 'arn:aws:elasticloadbalancing:ap-south-1:123456789012:targetgroup/ctse-backend-service'  # Target the existing green target group initially
+              } ]"
+
       - name: Deploy to Amazon ECS with CodeDeploy (Blue/Green Deployment)
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
         with:
