@@ -69,7 +69,7 @@ jobs:
 
             - name: Create appspec.yaml
             run: |
-              echo "version: 0.0" >> appspec.yaml
+              echo "version: 0.0" > appspec.yaml
               echo "Resources:" >> appspec.yaml
               echo "  - TargetService:" >> appspec.yaml
               echo "      Type: AWS::ECS::Service" >> appspec.yaml
