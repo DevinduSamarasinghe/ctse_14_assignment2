@@ -67,10 +67,10 @@ jobs:
             echo "          ContainerName: ${{ env.CONTAINER_NAME }}" >> appspec.yaml
             echo "          ContainerPort: 80" >> appspec.yaml
 
-      - name: Deploy to Amazon ECS with CodeDeploy (Blue/Green Deployment)
-        uses: aws-actions/aws-codedeploy-github-deploy@v1
-        with:
-          application-name: ${{ env.CODEDEPLOY_APPLICATION }}
-          deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
-          region: ${{ env.AWS_REGION }}
-          revision-file: appspec.yaml
+      - name: Deploy to Amazon ECS with Blue-Green using AWS CLI
+        run: |
+          aws deploy create-deployment \
+          --application-name $CODEDEPLOY_APPLICATION \
+          --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP \
+          --revision file://appspec.yaml \
+          --region $AWS_REGION
