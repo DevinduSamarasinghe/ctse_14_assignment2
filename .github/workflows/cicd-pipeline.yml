@@ -13,7 +13,7 @@ env:
   ECS_CLUSTER: ctse-cluster               # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ctse-backend.json # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
   CONTAINER_NAME: ctse_14_assignment2         # set this to the name of the container in the containerDefinitions section of your task definition
-  CODEDEPLOY_APPLICATION_NAME: AppECS-ctse-cluster-ctse-backend-service
+  CODEDEPLOY_APPLICATION_NAME: AppECS-ctse-cluster-ctse-backend-service 
   CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-ctse-cluster-ctse-backend-service
 jobs:
   deploy:
@@ -55,23 +55,17 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
-      - name: Create New ECS Service (Blue)
+      - name: Create appspec.yaml
         run: |
-            aws ecs register-task-definition \
-              --family ctse-backend \
-              --cli-input-json file://ctse-backend.json \
-            && aws ecs create-service \
-              --cluster ctse-cluster \
-              --service-name ctse-backend-service-blue \
-              --task-definition ctse-backend \
-              --desired-count 1 \
-              --launch-type EC2  # Adjust if using EC2 instances
-              --network-configuration networkConfiguration="{subnets: ['subnet-0f479e14f57b357b3', 'subnet-0285c32c60a1ec6e9','subnet-0fc688f22ed6a0bc7']}"   # Replace with your subnet IDs
-              --load-balancers loadBalancers="[ {
-                'containerName': 'ctse-alb-1',
-                'containerPort': 80,
-                'targetGroupArn': 'arn:aws:elasticloadbalancing:ap-south-1:123456789012:targetgroup/ctse-backend-service'  # Target the existing green target group initially
-              } ]"
+            echo "version: 0.0" >> appspec.yaml
+            echo "Resources:" >> appspec.yaml
+            echo "  - TargetService:" >> appspec.yaml
+            echo "      Type: AWS::ECS::Service" >> appspec.yaml
+            echo "      Properties:" >> appspec.yaml
+            echo "        TaskDefinition: ${{ steps.task-def.outputs.task-definition }}" >> appspec.yaml
+            echo "        LoadBalancerInfo:" >> appspec.yaml
+            echo "          ContainerName: ${{ env.CONTAINER_NAME }}" >> appspec.yaml
+            echo "          ContainerPort: 80" >> appspec.yaml
 
       - name: Deploy to Amazon ECS with CodeDeploy (Blue/Green Deployment)
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
