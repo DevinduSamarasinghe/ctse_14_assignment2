@@ -4,16 +4,17 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-      - main
+      - feat/blue-green-deployment
 
 env:
   AWS_REGION: ap-south-1                      # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: ctse_14_assignment2          # set this to your Amazon ECR repository name
   ECS_SERVICE: ctse-backend-service              # set this to your Amazon ECS service name
-  ECS_CLUSTER: DevCluster-EC2               # set this to your Amazon ECS cluster name
+  ECS_CLUSTER: ctse-cluster               # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ctse-backend.json # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
   CONTAINER_NAME: ctse_14_assignment2         # set this to the name of the container in the containerDefinitions section of your task definition
-
+  CODEDEPLOY_APPLICATION_NAME: AppECS-ctse-cluster-ctse-backend-service
+  CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-ctse-cluster-ctse-backend-service
 jobs:
   deploy:
     name: Deploy
@@ -41,14 +42,12 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
+
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
+      - name: Update the Task Definition in ECS
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
         with:
@@ -56,10 +55,12 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy Amazon ECS task definition
+      - name: Deploy to Amazon ECS with CodeDeploy (Blue/Green Deployment)
         uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
         with:
+          codedeploy-app-name: ${{ env.CODEDEPLOY_APPLICATION }}
+          codedeploy-deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          codedeploy-region: ${{ env.AWS_REGION }}
           wait-for-service-stability: true
