@@ -67,15 +67,14 @@ jobs:
             echo "          ContainerName: ${{ env.CONTAINER_NAME }}" >> appspec.yaml
             echo "          ContainerPort: 80" >> appspec.yaml
 
-      - name: Deploy to Amazon ECS with CodeDeploy (Blue/Green Deployment)
-        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+      - name: Deploy to Amazon ECS (Blue/Green)
+        uses: aws-actions/amazon-ecs-deploy-service@v2
         with:
-          codedeploy-application-name: ${{ env.CODEDEPLOY_APPLICATION }}
-          codedeploy-deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          codedeploy-region: ${{ env.AWS_REGION }}
-          service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
-          revision-file: appspec.yaml
+          service: ${{ env.ECS_SERVICE }}
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
           wait-for-service-stability: true
+          deployment-maximum-percent: 50
+          deployment-minimum-healthy-percent: 0
+          load-balancer-type: application
+          appspec-file: appspec.yaml
