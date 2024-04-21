@@ -68,7 +68,7 @@ jobs:
             echo "          ContainerPort: 80" >> appspec.yaml
 
       - name: Deploy to Amazon ECS with CodeDeploy (Blue/Green Deployment)
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        uses: aws-actions/amazon-ecs-deploy-task-definition
         with:
               codedeploy-application-name: ${{ env.CODEDEPLOY_APPLICATION }}
               codedeploy-deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
