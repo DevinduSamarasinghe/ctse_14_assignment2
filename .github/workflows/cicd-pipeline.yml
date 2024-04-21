@@ -67,10 +67,22 @@ jobs:
             echo "          ContainerName: ${{ env.CONTAINER_NAME }}" >> appspec.yaml
             echo "          ContainerPort: 80" >> appspec.yaml
 
+            - name: Create appspec.yaml
+            run: |
+              echo "version: 0.0" >> appspec.yaml
+              echo "Resources:" >> appspec.yaml
+              echo "  - TargetService:" >> appspec.yaml
+              echo "      Type: AWS::ECS::Service" >> appspec.yaml
+              echo "      Properties:" >> appspec.yaml
+              echo "        TaskDefinition: ${{ steps.task-def.outputs.task-definition }}" >> appspec.yaml
+              echo "        LoadBalancerInfo:" >> appspec.yaml
+              echo "          ContainerName: ${{ env.CONTAINER_NAME }}" >> appspec.yaml
+              echo "          ContainerPort: 80" >> appspec.yaml
+    
       - name: Deploy to Amazon ECS with Blue-Green using AWS CLI
         run: |
-          aws deploy create-deployment \
-          --application-name $CODEDEPLOY_APPLICATION \
-          --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP \
-          --revision file://appspec.yaml \
-          --region $AWS_REGION
+            aws deploy create-deployment \
+              --application-name $CODEDEPLOY_APPLICATION \
+              --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP \
+              --s3-location bucket=codepipeline-ap-south-1-949929072300,key=appspec.yaml,bundleType=YAML \
+              --region $AWS_REGION
