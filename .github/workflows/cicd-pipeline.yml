@@ -74,4 +74,3 @@ jobs:
           deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
           region: ${{ env.AWS_REGION }}
           revision-file: appspec.yaml
-          wait-until-deployed: true
