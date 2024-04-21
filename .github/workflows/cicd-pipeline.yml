@@ -71,6 +71,10 @@ jobs:
         uses: aws-actions/aws-codedeploy-github-deploy@v1
         with:
           application-name: ${{ env.CODEDEPLOY_APPLICATION }}
-          deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
-          region: ${{ env.AWS_REGION }}
-          #revision-file: appspec.yaml
+          codedeploy-deployment-group-name: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          codedeploy-region: ${{ env.AWS_REGION }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
