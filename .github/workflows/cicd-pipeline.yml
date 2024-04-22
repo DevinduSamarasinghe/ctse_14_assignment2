@@ -48,7 +48,7 @@ jobs:
 
       - name: Get Current ASG Instance Count and Calculate the new Desired Count
         run: |
-          current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].desiredInstances | length')
+          current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].DesiredCapacity | length')
           echo "Current Instance Count: $current_count"
           new_count=$((current_count+1))
           echo "New Desired Count: $new_count"
