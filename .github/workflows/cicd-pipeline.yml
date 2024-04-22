@@ -14,8 +14,38 @@ env:
   CONTAINER_NAME: ctse_14_assignment2 # set this to the name of the container in the containerDefinitions section of your task definition
 
 jobs:
-  deploy:
-    name: Deploy
+
+  Artifacts:
+    name: S3 artifact deployment
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: zipping appspec.yml and buildspec.yml
+        run: zip -r artifacts.zip appspec.yml buildspec.yml
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+           aws-access-key-id: <your-access-key-id>
+           aws-secret-access-key: <your-secret-access-key>
+           aws-region: <your-aws-region>
+      
+      - name: Upload artifacts to AWS S3
+        uses: usualdesigner/s3-artifact-upload@main
+        with:
+            bucket-name: <your-bucket-name>
+            file: artifacts.zip
+
+  Image-Push:
+    name: CI for ECR
     runs-on: ubuntu-latest
     environment: production
 
@@ -29,12 +59,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: Pushing artifacts to Amazon S3 bucket
-        uses: usualdesigner/s3-artifact-upload@main
-        with:
-            bucket-name: "ctse-s3"
-            file: "appspec.yml"
 
       - name: Login to Amazon ECR
         id: login-ecr
