@@ -1,0 +1,14 @@
+import express from "express";
+import Item from "../../controllers/item.js";
+
+const router = express.Router()
+
+router.get("/", Item.getAllItems);
+router.get("/getOne/:id", Item.getItem);
+router.get("/catalogue/:catalogueID", Item.getItemByCatalogueID);
+router.get("/supplier/:supplierID", Item.getItemBySupplierID);
+router.post("/", Item.createItem);
+router.put("/:id", Item.updateItem);
+router.delete("/:id", Item.deleteItem);
+
+export default router;
