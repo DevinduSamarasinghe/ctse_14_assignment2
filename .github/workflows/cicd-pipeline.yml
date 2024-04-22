@@ -34,7 +34,7 @@ jobs:
         uses: usualdesigner/s3-artifact-upload@main
         with:
             bucket-name: "ctse-s3"
-            file: appspec.yml, buildspec.yml, ctse-backend.json
+            file: "appspec.yml"
 
       - name: Login to Amazon ECR
         id: login-ecr
