@@ -72,7 +72,7 @@ jobs:
     
       - name: Update ECS Service Desired Count
         run: | 
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --desired-count 2 --region ${{ env.AWS_REGION }}
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name Infra-ECS-Cluster-ctse-cluster-0b87923c-ECSAutoScalingGroup-oOSweKzjYmqx --desired-capacity 2 --region ${{ env.AWS_REGION}}
           sleep 150s
 
       - name: Fill in the new image ID in the Amazon ECS task definition
