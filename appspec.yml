@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:aws-region-id:413620134126:task-definition/ctse-backend"
+        LoadBalancerInfo:
+          ContainerName: "ctse_14_assignment2"
+          ContainerPort: 80
