@@ -15,14 +15,14 @@ env:
 
 jobs:
 
-  Artifacts:
+  artifact-deploy:
     name: S3 artifact deployment
     runs-on: ubuntu-latest
     environment: production
     
     steps:
       - name: zipping appspec.yml and buildspec.yml
-        run: zip -r artifacts.zip appspec.yml buildspec.yml
+        run: zip -r artifacts.zip . -i appspec.yml buildspec.yml
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -44,7 +44,7 @@ jobs:
             bucket-name: <your-bucket-name>
             file: artifacts.zip
 
-  Image-Push:
+  image-push:
     name: CI for ECR
     runs-on: ubuntu-latest
     environment: production
