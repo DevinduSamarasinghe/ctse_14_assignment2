@@ -14,27 +14,6 @@ env:
   CONTAINER_NAME: ctse_14_assignment2 # set this to the name of the container in the containerDefinitions section of your task definition
 
 jobs:
-  codedeploy:
-    name: Push to CodeDeploy
-    runs-on: ubuntu-latest
-    environment: production  # or a different environment for CodeDeploy
-    steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-
-        - name: Configure AWS credentials (repeat for CodeDeploy)
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: ${{ env.AWS_REGION }}  # likely the same region
-
-        - name: Upload appspec and buildspec files (replace paths)
-          uses: aws-actions/aws-cli@v3
-          with:
-            aws-command: s3 cp
-            args: ./*.yml s3://ctse-s3/
-
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -50,6 +29,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Pushing artifacts to Amazon S3 bucket
+        uses: usualdesigner/s3-artifact-upload@main
+        with:
+            bucket-name: "ctse-s3"
+            file: appspec.yml, buildspec.yml, ctse-backend.json
 
       - name: Login to Amazon ECR
         id: login-ecr
