@@ -3,7 +3,7 @@ import express from "express"
 const app = express()
 const PORT = process.env.PORT || 80
 app.get("/", (req,res)=>{
-    res.send("Added ASG increment | additional change of cicd pipeline, pending issues - sonarcloud and blue deployment")
+    res.send("Computer Science")
 })
 
 app.get("/info",(req,res)=>{
