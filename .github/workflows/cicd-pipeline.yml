@@ -48,14 +48,14 @@ jobs:
 
       - name: Get Current ASG Instance Count and Calculate the new Desired Count
         run: |
-          current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].Instances | length')
+          current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].desiredInstance | length')
           echo "Current Instance Count: $current_count"
           new_count=$((current_count+1))
           echo "New Desired Count: $new_count"
     
       - name: Update ECS Service Desired Count
         run: | 
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{env.ASG_GROUP}} --desired-capacity $new_count --region ${{ env.AWS_REGION}}
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{env.ASG_GROUP}} --desired-capacity "$new_count" --region ${{ env.AWS_REGION}}
           sleep 80s
 
       - name: Fill in the new image ID in the Amazon ECS task definition
