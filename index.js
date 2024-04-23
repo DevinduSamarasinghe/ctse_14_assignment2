@@ -19,7 +19,7 @@ mongoose.connect(URL);
 
 const connection = mongoose.connection;
 connection.once("open", () => {
-  console.log("MongoDB connection success!");
+  console.log(`MongoDB connection success!\n${process.env.MONGODB_URL}`);
 });
 
 app.listen(PORT, ()=>{
