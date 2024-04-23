@@ -42,7 +42,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build \
-          # --build-arg "MONGODB_URL={{secrets.MONOGODB_URL}}" \
+          # --build-arg "MONGODB_URL={{secrets.MONOGODB_URL}}" 
           -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
