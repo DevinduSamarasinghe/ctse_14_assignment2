@@ -2,7 +2,7 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-      - main
+      - feat/multi-docker
 
 env:
   AWS_REGION: ap-south-1 # set this to your preferred AWS region, e.g. us-west-1
@@ -41,32 +41,35 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build \
+          --build-args "MONGODB_URL={{secrets.MONOGODB_URL}}" \
+          --build-args "JWTAUTH={{secrets.JWTAUTH}}" \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Collect Current Desired Count and Update 
-        run: |
-          current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].DesiredCapacity')
-          echo "Current Instance Count: $current_count"
-          new_count=$((current_count+1))
-          echo "New Desired Count: $new_count" 
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{env.ASG_GROUP}} --desired-capacity $new_count --region ${{env.AWS_REGION}}
-          echo "Updated Desired Count to $new_count"
-          sleep 70s
+      # - name: Collect Current Desired Count and Update 
+      #   run: |
+      #     current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].DesiredCapacity')
+      #     echo "Current Instance Count: $current_count"
+      #     new_count=$((current_count+1))
+      #     echo "New Desired Count: $new_count" 
+      #     aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{env.ASG_GROUP}} --desired-capacity $new_count --region ${{env.AWS_REGION}}
+      #     echo "Updated Desired Count to $new_count"
+      #     sleep 70s
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-        with:
-            task-definition: ${{ env.ECS_TASK_DEFINITION }}
-            container-name: ${{ env.CONTAINER_NAME }}
-            image: ${{ steps.build-image.outputs.image }}
+      # - name: Fill in the new image ID in the Amazon ECS task definition
+      #   id: task-def
+      #   uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+      #   with:
+      #       task-definition: ${{ env.ECS_TASK_DEFINITION }}
+      #       container-name: ${{ env.CONTAINER_NAME }}
+      #       image: ${{ steps.build-image.outputs.image }}
     
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
-        with:
-            task-definition: ${{ steps.task-def.outputs.task-definition }}
-            service: ${{ env.ECS_SERVICE }}
-            cluster: ${{ env.ECS_CLUSTER }}
-            wait-for-service-stability: true
+      # - name: Deploy Amazon ECS task definition
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+      #   with:
+      #       task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #       service: ${{ env.ECS_SERVICE }}
+      #       cluster: ${{ env.ECS_CLUSTER }}
+      #       wait-for-service-stability: true
