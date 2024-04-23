@@ -1,59 +1,39 @@
-import Item from "../models/item.js";
+let items = []; // Replace Mongoose model with an empty array
 
-export const getAllItems = async (req, res) => {
-  try {
-    const items = await Item.find();
-    res.status(200).json(items);
-  } catch (error) {
-    res.status(404).json({ message: error });
-  }
+export const getAllItems = () => {
+  return items;
 };
 
-//get one item
-export const getItem = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const item = await Item.findById(id);
-    res.status(200).json(item);
-  } catch (error) {
-    res.status(404).json({ message: error });
-  }
+export const getItem = (id) => {
+  const foundItem = items.find(item => item.id === id);
+  return foundItem ? foundItem : null; // Return null if item not found
 };
 
-//create item
-export const createItem = async (req, res) => {
-  const item = req.body;
-  const newItem = new Item(item);
-  try {
-    await newItem.save();
-    res.status(201).json(newItem);
-  } catch (error) {
-    res.status(404).json({ message: error });
-  }
+export const createItem = (item) => {
+  // Assign a unique ID (consider using a library like uuid for better generation)
+  item.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  items.push(item);
+  return item;
 };
 
-//update item
-export const updateItem = async (req, res) => {
-  const id = req.params.id;
-  const update = req.body;
-  try {
-    await Item.findByIdAndUpdate(id, update);
-    res.status(200).send({ status: "Item details updated" });
-  } catch (error) {
-    res.status(404).json({ message: error });
+export const updateItem = (id, updateData) => {
+  const itemIndex = items.findIndex(item => item.id === id);
+  if (itemIndex !== -1) {
+    items[itemIndex] = { ...items[itemIndex], ...updateData }; // Update item properties
+    return items[itemIndex];
   }
+  return null; // Return null if item not found
 };
 
-//delete item
-export const deleteItem = async (req, res) => {
-  const id = req.params.id;
-  try {
-    await Item.findByIdAndDelete(id);
-    res.status(200).send({ status: "Item details Deleted" });
-  } catch (error) {
-    res.status(404).json({ message: error });
+export const deleteItem = (id) => {
+  const itemIndex = items.findIndex(item => item.id === id);
+  if (itemIndex !== -1) {
+    items.splice(itemIndex, 1); // Remove item from array
+    return true;
   }
+  return false; // Return false if item not found
 };
+
 
 export default {
   getAllItems,
