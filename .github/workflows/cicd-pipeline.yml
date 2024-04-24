@@ -49,7 +49,7 @@ jobs:
         run: |
           current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].DesiredCapacity')
           echo "Current Instance Count: $current_count"
-          new_count=$((current_count+1))
+          new_count=$((current_count+2))
           echo "New Desired Count: $new_count" 
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{env.ASG_GROUP}} --desired-capacity $new_count --region ${{env.AWS_REGION}}
           echo "Updated Desired Count to $new_count"
