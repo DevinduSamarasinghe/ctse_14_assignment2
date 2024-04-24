@@ -42,9 +42,9 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build \
-          --build-arg MONGOD_BURL=${{secrets.MONGODB_URL}} \
-          --build-arg JWT_SECRET=${{secrets.JWT_SECRET}} \
-          -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+            --build-arg MONGOD_BURL=${{secrets.MONGODB_URL}} \
+            --build-arg JWT_SECRET=${{secrets.JWT_SECRET}} \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
