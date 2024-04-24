@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:413620134126:task-definition/ctse-backend:1",
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:413620134126:task-definition/ctse-backend:39",
     "containerDefinitions": [
         {
             "name": "ctse_14_assignment2",
-            "image": "413620134126.dkr.ecr.ap-south-1.amazonaws.com/ctse_14_assignment2:latest",
+            "image": "413620134126.dkr.ecr.ap-south-1.amazonaws.com/ctse_14_assignment2:8a8ff562b01610107113ff7f401ca28c83c21df5",
             "cpu": 0,
             "portMappings": [
                 {
@@ -15,16 +15,9 @@
                 }
             ],
             "essential": true,
-            "environment": [
-                {
-                    "name": "PORT",
-                    "value": "80"
-                }
-            ],
-            "environmentFiles": [],
+            "environment": [],
             "mountPoints": [],
             "volumesFrom": [],
-            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -42,7 +35,7 @@
     "taskRoleArn": "arn:aws:iam::413620134126:role/ECS-ECR-Role",
     "executionRoleArn": "arn:aws:iam::413620134126:role/ECS-ECR-Role",
     "networkMode": "awsvpc",
-    "revision": 1,
+    "revision": 39,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -76,8 +69,7 @@
     ],
     "placementConstraints": [],
     "compatibilities": [
-        "EC2",
-        "FARGATE"
+        "EC2"
     ],
     "requiresCompatibilities": [
         "EC2"
@@ -88,7 +80,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-04-20T17:47:21.807Z",
+    "registeredAt": "2024-04-24T19:12:53.192Z",
     "registeredBy": "arn:aws:iam::413620134126:user/devindu-dev",
     "tags": []
 }
