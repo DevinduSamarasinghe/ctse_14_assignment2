@@ -51,8 +51,33 @@ Observation 4: Failed after second CICD - Because second availability zone has n
     Cluster: Creating a cluster with 2 private subnets 
     Service: Creating a service assigned to 1 private and 1 public subnet in different availability zones
 
-Observation 5: 
+Observation 5: Both methods failed since NAT gateways are assigned to both, 2nd method broke cause of whitelist issue
     VPC: Creating VPC with 2 subnets for zone a,b with both private and public with NAT gateway for each availability zone
     Cluster: Creating a cluster with 2 private subnets 
-    Service: Creating a service assigned to 2 private availability zones -> trying 
-    Service config 2: Creating a service assigned to 1 private 1 public availability zones
+    Service: Creating a service assigned to 2 private availability zones -> Failed
+    Service config 2: Creating a service assigned to 1 private 1 public availability zones -> Failed
+
+Observation 6: Failed, Doesnt identify the EC2 instances
+    VPC: Creating a VPC with no Gateway
+    Cluster: Creating a cluster with 2 private subnets
+    Service: Creating a service assigned to 2 public availability zones 
+
+Observation 7: Failed
+    VPC: Creating a VPC with 2 private and 2 public with one NAT
+    Cluster: Creating a cluster with 2 public subnets
+    Service: Creating a service assigned to 1 public subnet
+
+Observation 8: 
+    VPC: Creating a VPC with 2 private and 2 public with one NAT
+    Cluster: Cluster with all subnets with public IP on for all
+    Service: Creating a service with private subnet and public subnet (Not the NAT Gateway)
+
+Observation 9:
+    VPC: 2 private 2 public one NAT 
+    Cluster: Cluster with all subnets with public IP on for all
+    Service: Creating a service assigned to 1 public 1 private
+
+Observation 10: 
+    VPC: 2 private 2 public one NAT 
+    Cluster: Cluster with all subnets
+    Service: Creating a service assigned to 1 public 1 private
