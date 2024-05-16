@@ -1,19 +1,28 @@
 import express from "express"
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import cors from "cors";
+import dotenv from "dotenv/config";
+
+import routers from "./routers/index.js";
 
 const app = express()
 const PORT = process.env.PORT || 80
+app.use(cors());
+app.use(bodyParser.json());
 
+routers(app);
 
-app.get("/", (req,res)=>{
-    res.send("Final Deploy-test commit")
-})
+const URL = process.env.MONGODB_URL;
 
-app.get("/info",(req,res)=>{
-    res.send("IT21003332 - Devindu Samarasinghe\nIT21004636 - Nashali Perera\nIT21004322 - Chanukya Serasinghes and sons lol")
-})
+mongoose.connect(URL);
 
+const connection = mongoose.connection;
+connection.once("open", () => {
+  console.log(`MongoDB connection success!\n`);
+});
 
 app.listen(PORT, ()=>{
-    console.log(`Server is running on port ${PORT}`)
+    console.log(`Server is running on port ${PORT}\n${process.env.MONGODB_URL}`)
 })
 
