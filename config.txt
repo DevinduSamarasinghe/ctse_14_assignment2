@@ -1,0 +1,47 @@
+Configurations, 
+
+
+1. VPCs - First Create the VPCs. Defaults do not work, when creating VPCs consider observation 4. 
+2. Cluster - Creating the cluster with private subnets worked
+3. Task Definition - Refer to the ctse-backend.json
+4. Service - Refer to the Observation 4
+
+
+Observations 1: Failed
+    Cluster:
+        Created a VPC with 1 public and 1 private subnets 
+        Created a cluster with private subnet only 
+        Successfully identified the instance in the ASG group
+
+    Service: 
+        Service placement provides both private and public subnets, about to place it in the private;
+            - Failed since there are no 2 subnets for the load balancer -> possible
+        Service placement provides both private and public subnets, but cannot assign two subnets for one availability zone
+            - Failed anyway because the cluster should be created with two different availability zones
+
+Observation 2: Failed cause cluster has no public subnet to access
+    VPC:
+        Creating the VPC with 2 private and 2 public subnets. with one NAT gateway for 1 AZ. 
+
+    Cluster: 
+        Creating the Cluster with 2 private subnets.
+    
+    Service: 
+        Creating the service by assigning two private subnets
+        
+
+Observation 3: Failed, because the public subnets have NAT gateways assigned, leading to lack of 
+    VPC: 
+        Same VPC with 2 subnets for private and public each with NAT gateway for 1 AZ
+
+    Cluster:
+        Creating a Cluster with 2 private
+    
+    Service: 
+        Creating the service assigned to 2 public subnets instead 
+
+
+Observation 4: Successful
+    VPC: Same VPC with 2 subnets for private and public each with NAT Gateway
+    Cluster: Creating a cluster with 2 private subnets 
+    Service: Creating a service assigned to 1 private and 1 public subnet in different availability zones
