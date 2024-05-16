@@ -7,11 +7,11 @@ on:
 env:
   AWS_REGION: ap-south-1 # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: ctse_14_assignment2 # set this to your Amazon ECR repository name
-  ECS_SERVICE: ctse-priv-pub # set this to your Amazon ECS service name
-  ECS_CLUSTER: ctse-public-ser # set this to your Amazon ECS cluster name
+  ECS_SERVICE: ctse-backend-service # set this to your Amazon ECS service name
+  ECS_CLUSTER: ctse-prod # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ctse-backend.json # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
   CONTAINER_NAME: ctse_14_assignment2 # set this to the name of the container in the containerDefinitions section of your task definition
-  ASG_GROUP: Infra-ECS-Cluster-ctse-public-ser-047f5898-ECSAutoScalingGroup-lDUHFkvrTePB #Set this to the ASG Group associated with your ECS cluster
+  ASG_GROUP: Infra-ECS-Cluster-ctse-prod-77c20bef-ECSAutoScalingGroup-fDs7LI6bOYJg #Set this to the ASG Group associated with your ECS cluster
 
 
 jobs:
@@ -52,7 +52,7 @@ jobs:
         run: |
           current_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${{env.ASG_GROUP}} --region ${{ env.AWS_REGION}} | jq -r '.AutoScalingGroups[0].DesiredCapacity')
           echo "Current Instance Count: $current_count"
-          new_count=$((current_count+2))
+          new_count=$((current_count+1))
           echo "New Desired Count: $new_count" 
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{env.ASG_GROUP}} --desired-capacity $new_count --region ${{env.AWS_REGION}}
           echo "Updated Desired Count to $new_count"

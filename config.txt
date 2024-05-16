@@ -1,10 +1,15 @@
 Configurations, 
 
 
-1. VPCs - First Create the VPCs. Defaults do not work, when creating VPCs consider observation 4. 
+1. VPCs - First Create the VPCs. Defaults do not work, when creating VPCs consider observation 5. 
 2. Cluster - Creating the cluster with private subnets worked
 3. Task Definition - Refer to the ctse-backend.json
-4. Service - Refer to the Observation 4
+4. Service - Refer to the Observation 5
+
+How to remove a VPC
+    Remove NAT Gateways 
+    Remove Internet Gateway 
+    Delete VPC
 
 
 Observations 1: Failed
@@ -41,7 +46,13 @@ Observation 3: Failed, because the public subnets have NAT gateways assigned, le
         Creating the service assigned to 2 public subnets instead 
 
 
-Observation 4: Successful
+Observation 4: Failed after second CICD - Because second availability zone has no NAT gateway
     VPC: Same VPC with 2 subnets for private and public each with NAT Gateway
     Cluster: Creating a cluster with 2 private subnets 
     Service: Creating a service assigned to 1 private and 1 public subnet in different availability zones
+
+Observation 5: 
+    VPC: Creating VPC with 2 subnets for zone a,b with both private and public with NAT gateway for each availability zone
+    Cluster: Creating a cluster with 2 private subnets 
+    Service: Creating a service assigned to 2 private availability zones -> trying 
+    Service config 2: Creating a service assigned to 1 private 1 public availability zones
