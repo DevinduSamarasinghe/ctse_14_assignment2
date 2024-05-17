@@ -92,9 +92,8 @@ Observation 12: Failed cause cluster does not have a public VPN.
     Cluster: 2 Private subnets 
     Service: Reside in 2 privates
 
-
 Observation 13: Currently Working for both MongoDb and Internet 
-    VPC: 2 Private 2 Public 1 NAT - Nat resides in ap-south-a
+    VPC: 2 Private 2 Public 1 NAT - Nat resides in ap-south-1a
     Cluster: Created with both Private and Public subnets
              Adjusted the ASG group launch template to only trigger instantiations from ap-south-b
     Service: Reside in two subnets, private subnet - ap-south-b (same as the adjusted ASG subnet) public subnet - NAT gateway
