@@ -38,7 +38,7 @@ The project uses Docker to maintain a standardized, consistent environment acros
 ### Container Registry
 Amazon Elastic Container Registry (ECR) is used to host Docker images. The CI/CD pipeline pushes newly created Docker images to ECR, ensuring the latest version of the application is always ready for deployment.
 
-## DevOps Practices
+## DevOps Practices 
 ### Programming Language and Framework
 Node.js is used for the project due to its efficient event-driven architecture and extensive library environment, which includes tools like Express.js. Visual Studio Code (VSCode) is the recommended IDE for its robust support for JavaScript and integration with tools like GitHub and Docker.
 
@@ -51,6 +51,12 @@ GitHub is used as the version control system, with features like pull requests, 
 ## Security Measures
 ### IAM Users and Roles
 AWS Identity and Access Management (IAM) is used to enforce the principle of least privilege by creating specific IAM users and roles with defined permissions. This reduces the risk of unauthorized access to vital resources.
+
+## VPC Configurations
+Creation of VPC for the Elastic Container Services cluster to reside in a private and public virtual space, where the services run in private while having public subnets for internet access with NAT Gateways
+
+## NAT Gateways 
+Creation of Nat Gateways for the service to have outbound connection only from one specific EC2 instance. 
 
 ### Secrets Management
 GitHub's secrets management tools are used to securely handle sensitive data like passwords and API keys, ensuring they are never exposed in the codebase.
@@ -70,6 +76,12 @@ Storing AWS access keys directly in YAML files was avoided by using GitHub's Sec
 
 ### Deployment Challenges
 Initial deployment attempts using Amazon ECS with Fargate were switched to EC2 instances due to cost constraints. Configuring auto-scaling and load balancers ensured scalability and high availability.
+
+## VPC Configuration errors for Deployment
+Having to create an outbound connection while having private subnets were a struggle considering outbound connections are initially blocked by private subnets, to overcome this, public subnets were resided within the ECS cluster and created NAT gateways inside one cluster.
+
+## Instantiation of EC2 instances in Auto Scaling Group
+Initially the ECS cluster has subnets from both private and public, it would only detect the EC2 instances from private subnets, leading to an error in deploying the service. This was solved by having launch templates for the auto-scaling group
 
 ## IAM Role Configurations and GitHub Actions ECS
 ### IAM Role Configurations
@@ -106,21 +118,12 @@ The CI/CD pipeline uses GitHub Actions to automate the build and deployment proc
    ```sh
    docker run -p 80:80 inventory-management
    ```
-
-### Deployment
-1. Push Docker image to ECR:
-   ```sh
-   aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account-id>.dkr.ecr.<region>.amazonaws.com
-   docker tag inventory-management:latest <account-id>.dkr.ecr.<region>.amazonaws.com/inventory-management:latest
-   docker push <account-id>.dkr.ecr.<region>.amazonaws.com/inventory-management:latest
-   ```
-
-2. Deploy using GitHub Actions:
-   - Update the GitHub repository secrets with your AWS credentials and ECR repository details.
-   - Push changes to the repository to trigger the CI/CD pipeline.
-
 ### Usage
 - Access the API at `http://localhost:80/api/item` to interact with the inventory management endpoints.
+
+- Access the Deployed API at `http://ctse-albt-3-1592779719.ap-south-1.elb.amazonaws.com/` to interact with the whole service altogether.
+
+ - `/info` - can be used for the AWS configuration information
 
 ### Contributing
 - Fork the repository.
@@ -130,8 +133,8 @@ The CI/CD pipeline uses GitHub Actions to automate the build and deployment proc
 - Create a new Pull Request.
 
 ### Authors
-- D S Samarasinghe 
-- M Muthusinghe 
+- D S Samarasinghe
+- M Muthusinghe
 - G N P Perera 
 - C M Serasinghe 
 
