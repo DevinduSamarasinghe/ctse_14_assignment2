@@ -11,7 +11,6 @@ How to remove a VPC
     Remove Internet Gateway 
     Delete VPC
 
-
 Observations 1: Failed
     Cluster:
         Created a VPC with 1 public and 1 private subnets 
@@ -67,17 +66,23 @@ Observation 7: Failed
     Cluster: Creating a cluster with 2 public subnets
     Service: Creating a service assigned to 1 public subnet
 
-Observation 8: 
+Observation 8: Failed - Issue resides with having no NAT gateway for south-b
     VPC: Creating a VPC with 2 private and 2 public with one NAT
     Cluster: Cluster with all subnets with public IP on for all
     Service: Creating a service with private subnet and public subnet (Not the NAT Gateway)
 
-Observation 9:
+
+Observation 9: can be solved with a potential public on private cluster which runs on private service -> nat gateways on both publics
+    VPC: 2 private 2 public NAT on both
+    Cluster: 2 private with public IP on 
+    service: running on those 2 privates 
+
+Observation 10:
     VPC: 2 private 2 public one NAT 
     Cluster: Cluster with all subnets with public IP on for all
     Service: Creating a service assigned to 1 public 1 private
 
-Observation 10: 
+Observation 11: 
     VPC: 2 private 2 public one NAT 
     Cluster: Cluster with all subnets
     Service: Creating a service assigned to 1 public 1 private
