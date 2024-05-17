@@ -1,10 +1,10 @@
 Configurations, 
 
 
-1. VPCs - First Create the VPCs. Defaults do not work, when creating VPCs consider observation 5. 
+1. VPCs - First Create the VPCs. Defaults do not work, when creating VPCs consider observation 13. 
 2. Cluster - Creating the cluster with private subnets worked
 3. Task Definition - Refer to the ctse-backend.json
-4. Service - Refer to the Observation 5
+4. Service - Refer to the Observation 13
 
 How to remove a VPC
     Remove NAT Gateways 
