@@ -1,5 +1,16 @@
 # Inventory Management Microservice
 
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Microservice Description](#microservice-description)
+3. [Containerization](#containerization)
+4. [DevOps Practices](#devops-practices)
+5. [Security Measures](#security-measures)
+6. [Challenges and Fixes](#challenges-and-fixes)
+7. [IAM Role Configurations and GitHub Actions ECS](#iam-role-configurations-and-github-actions-ecs)
+8. [Getting Started](#getting-started)
+
+
 ## Introduction
 In recent years, the adoption of microservices architecture has become a predominant approach in designing scalable and flexible software applications. Microservices allow the development of individual components of an application as independent services, which communicate over well-defined APIs. This architecture not only enhances the scalability and manageability of applications but also improves the ability to integrate continuous delivery and DevOps practices effectively.
 
