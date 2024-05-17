@@ -77,7 +77,7 @@ The CI/CD pipeline uses GitHub Actions to automate the build and deployment proc
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-repo/inventory-management-microservice.git
+   git clone https://github.com/DevinduSamarasinghe/ctse_14_assignment2.git
    cd inventory-management-microservice
    ```
 
@@ -119,9 +119,9 @@ The CI/CD pipeline uses GitHub Actions to automate the build and deployment proc
 - Create a new Pull Request.
 
 ### Authors
-D S Samarasinghe 
-M Muthusinghe 
-G N P Perera 
-C M Serasinghe 
+- D S Samarasinghe 
+- M Muthusinghe 
+- G N P Perera 
+- C M Serasinghe 
 
-This README.md provides a clear overview of your project, how to set it up locally, the structure of your microservices, security implementations, and the handling of IAM roles and GitHub Actions ECS for your CI/CD pipeline. .
+Note : This README.md provides a clear overview of your project, how to set it up locally, the structure of your microservices, security implementations, and the handling of IAM roles and GitHub Actions ECS for your CI/CD pipeline. .
