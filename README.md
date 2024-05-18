@@ -51,11 +51,14 @@ GitHub is used as the version control system, with features like pull requests, 
 ## Security Measures
 ### IAM Users and Roles
 AWS Identity and Access Management (IAM) is used to enforce the principle of least privilege by creating specific IAM users and roles with defined permissions. This reduces the risk of unauthorized access to vital resources.
+- Created IAM roles to specifically pull images to the cluster by ECR
+- Created IAM roles to provide Outbound access to EC2 instances
+- Created IAM roles for users with create, read, delete, update privileges to ECS, ECR, EC2, VPC and Cloud Formation
 
-## VPC Configurations
+### VPC Configurations
 Creation of VPC for the Elastic Container Services cluster to reside in a private and public virtual space, where the services run in private while having public subnets for internet access with NAT Gateways
 
-## NAT Gateways 
+### NAT Gateways 
 Creation of Nat Gateways for the service to have outbound connection only from one specific EC2 instance. 
 
 ### Secrets Management
