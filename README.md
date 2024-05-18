@@ -124,7 +124,7 @@ The CI/CD pipeline uses GitHub Actions to automate the build and deployment proc
 ### Usage
 - Access the API at `http://localhost:80/api/item` to interact with the inventory management endpoints.
 
-- Access the Deployed API at `http://ctse-albt-3-1592779719.ap-south-1.elb.amazonaws.com/` to interact with the whole service altogether.
+- Access the Deployed API at `ctse-albt-3-1592779719.ap-south-1.elb.amazonaws.com/` to interact with the whole service altogether.
 
  - `/info` - can be used for the AWS configuration information
 
