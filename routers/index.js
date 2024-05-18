@@ -3,7 +3,7 @@ import itemRouter from './router/Item.js';
 function routers(app) {
     app.use('/api/item', itemRouter);
     app.get('/',(req,res)=>{
-        res.send('CTSE Assignment 2 - Group 14\nMicroservice Running Successfully')
+        res.send('CTSE Assignment 2 - Group 14\nMicroservice Running Successfully Testing Final')
     })
     app.get('/info',(req,res)=>{
         const info = {
